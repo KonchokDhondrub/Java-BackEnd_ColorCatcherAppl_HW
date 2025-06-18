@@ -13,26 +13,23 @@ import java.net.URI;
 public class ColorCatcherAppl {
     public static void main(String[] args) {
         if (args.length == 0) {
-            throw  new IllegalArgumentException("Please type your API KEY");
+            throw new IllegalArgumentException("Please provide Basic Authentication Credentials");
         }
-        if (args.length == 1) {
-            String auth = args[0];
-            String imgUrl = "https://imagga.com/static/images/tagging/wind-farm-538576_640.jpg";
-        }
-        if (args.length == 2) {
-            String auth = args[0];
-            String imgUrl = args[1];
-        }
+
+        String url = "https://api.imagga.com/v2/colors";
+        String testImg = "https://imagga.com/static/images/tagging/wind-farm-538576_640.jpg";
+        String auth = args[0].startsWith("Basic ") ? args[0] : "Basic " + args[0].trim();
+        String imgUrl = args.length != 2 ? testImg : args[1];
 
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", auth);
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("https://api.imagga.com/v2/colors").queryParam("image_url", imgUrl);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("image_url", imgUrl);
 
-        URI url = builder.build().toUri();
-        RequestEntity<String> request = new RequestEntity<>(headers, HttpMethod.GET, url);
+        URI uri = builder.build().toUri();
+        RequestEntity<String> request = new RequestEntity<>(headers, HttpMethod.GET, uri);
 
         ResponseEntity<TagsResponseDto> response = restTemplate.exchange(request, TagsResponseDto.class);
 
