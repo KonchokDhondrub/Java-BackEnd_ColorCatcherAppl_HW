@@ -12,8 +12,17 @@ import java.net.URI;
 
 public class ColorCatcherAppl {
     public static void main(String[] args) {
-        String auth = args[0]; // Don't forget about your API key: "Basic <API_KEY>"
-        String imgUrl = "https://imagga.com/static/images/tagging/wind-farm-538576_640.jpg";
+        if (args.length == 0) {
+            throw  new IllegalArgumentException("Please type your API KEY");
+        }
+        if (args.length == 1) {
+            String auth = args[0];
+            String imgUrl = "https://imagga.com/static/images/tagging/wind-farm-538576_640.jpg";
+        }
+        if (args.length == 2) {
+            String auth = args[0];
+            String imgUrl = args[1];
+        }
 
         RestTemplate restTemplate = new RestTemplate();
 
